@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{roomName}} - Chatroom</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <h1>Welcome to the {{roomName}} Chatroom</h1>
@@ -11,14 +11,17 @@
         <div id="messages">
             <!-- Messages will be loaded here -->
         </div>
-        <form id="messageForm">
+        <form id="nicknameForm">
             <label for="nickname">Nickname:</label>
             <input type="text" id="nickname" name="nickname" required>
+            <button type="submit">Set Nickname</button>
+        </form>
+        <form id="messageForm" style="display: none;">
             <label for="message">Message:</label>
             <input type="text" id="message" name="message" required>
             <button type="submit">Send</button>
         </form>
     </div>
-    <script src="/scripts/room.js"></script>
+    <script src="/js/room.js"></script>
 </body>
 </html>
