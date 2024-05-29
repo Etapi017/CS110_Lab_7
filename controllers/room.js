@@ -1,38 +1,48 @@
 const express = require('express');
 const router = express.Router();
-const roomGenerator = require('../util/roomIdGenerator.js');
-const messages = {}; // This object will store messages for simplicity
+const Chatroom = require('../models/Chatroom');
+const Message = require('../models/Message');
 
-// Example for handle a get request at '/:roomName' endpoint.
+// Handle a get request at '/:roomName' endpoint
 function getRoom(request, response) {
     response.render('room', {
         title: 'Chatroom',
-        roomName: request.params.roomName,
-        newRoomId: roomGenerator.roomIdGenerator()
+        roomName: request.params.roomName
     });
 }
 
 // Handle fetching messages for a specific chatroom
 router.get('/:roomName/messages', (req, res) => {
     const roomName = req.params.roomName;
-    const roomMessages = messages[roomName] || [];
-    res.json(roomMessages);
+    Chatroom.findOne({ name: roomName })
+        .populate('messages')
+        .exec((err, chatroom) => {
+            if (err) throw err;
+            res.json(chatroom.messages);
+        });
 });
 
 // Handle posting a new message to a specific chatroom
 router.post('/:roomName/messages', (req, res) => {
     const roomName = req.params.roomName;
     const { nickname, message } = req.body;
-    const newMessage = {
-        nickname,
-        body: message,
-        datetime: new Date().toISOString()
-    };
-    if (!messages[roomName]) {
-        messages[roomName] = [];
-    }
-    messages[roomName].push(newMessage);
-    res.json({ success: true });
+
+    Chatroom.findOne({ name: roomName }, (err, chatroom) => {
+        if (err) throw err;
+        const newMessage = new Message({
+            nickname,
+            body: message,
+            chatroom: chatroom._id
+        });
+        newMessage.save((err, savedMessage) => {
+            if (err) throw err;
+            chatroom.messages.push(savedMessage);
+            chatroom.save((err) => {
+                if (err) throw err;
+                res.json({ success: true });
+            });
+        });
+    });
 });
 
 module.exports = {

@@ -1,11 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
+const mongoose = require('mongoose');
 const homeRouter = require('./controllers/home').router;
 const roomRouter = require('./controllers/room').router;
 
 const app = express();
 const PORT = 8080;
+
+// Connect to MongoDB
+mongoose.connect('mongodb://localhost:27017/chatroom', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
 // Set up Handlebars as the view engine
 app.engine('hbs', exphbs({ extname: 'hbs', defaultLayout: 'layout' }));
