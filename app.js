@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
+const path = require('path');
 const mongoose = require('mongoose');
 const homeRouter = require('./controllers/home').router;
 const roomRouter = require('./controllers/room').router;
@@ -15,7 +16,8 @@ mongoose.connect('mongodb://localhost:27017/chatroom', {
 });
 
 // Set up Handlebars as the view engine
-app.engine('hbs', exphbs({ extname: 'hbs', defaultLayout: 'layout' }));
+app.engine('hbs', exphbs({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts/' }));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 // Middleware
