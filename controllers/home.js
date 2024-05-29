@@ -4,9 +4,11 @@ const Chatroom = require('../models/Chatroom');
 
 // Handle a get request at '/' endpoint
 function getHome(request, response) {
-    Chatroom.find({}, (err, chatrooms) => {
-        if (err) throw err;
+    Chatroom.find().exec().then(chatrooms => {
         response.render('home', { title: 'Home', chatrooms });
+    }).catch(err => {
+        console.error(err);
+        response.status(500).send("Error fetching chatrooms");
     });
 }
 
@@ -14,9 +16,11 @@ function getHome(request, response) {
 router.post('/create', (req, res) => {
     const roomName = req.body.roomName;
     const newChatroom = new Chatroom({ name: roomName });
-    newChatroom.save((err) => {
-        if (err) throw err;
+    newChatroom.save().then(() => {
         res.json({ success: true });
+    }).catch(err => {
+        console.error(err);
+        res.status(500).send("Error creating chatroom");
     });
 });
 

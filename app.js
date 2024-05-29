@@ -11,8 +11,11 @@ const PORT = 8080;
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/chatroom', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+    // options not needed anymore
+}).then(() => {
+    console.log("Connected to MongoDB");
+}).catch(err => {
+    console.error("Failed to connect to MongoDB", err);
 });
 
 // Set up Handlebars as the view engine
