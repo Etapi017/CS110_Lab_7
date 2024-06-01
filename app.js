@@ -9,13 +9,12 @@ const roomRouter = require('./controllers/room').router;
 const app = express();
 const PORT = 8080;
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/chatroom', {
-    // options not needed anymore
-}).then(() => {
-    console.log("Connected to MongoDB");
+// Connect to MongoDB Atlas
+const mongoUri = 'mongodb+srv://tapiaedgarney:M0ng0dbAcc0unt@cluster0.q8tflks.mongodb.net/chatroom?retryWrites=true&w=majority&appName=Cluster0';
+mongoose.connect(mongoUri).then(() => {
+    console.log("Connected to MongoDB Atlas");
 }).catch(err => {
-    console.error("Failed to connect to MongoDB", err);
+    console.error("Failed to connect to MongoDB Atlas", err);
 });
 
 // Set up Handlebars as the view engine
