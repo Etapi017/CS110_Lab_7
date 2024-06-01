@@ -4,7 +4,8 @@ const Chatroom = require('../models/Chatroom');
 
 // Handle a get request at '/' endpoint
 function getHome(request, response) {
-    Chatroom.find().exec().then(chatrooms => {
+    Chatroom.find().then(chatrooms => {
+        console.log(chatrooms);  // Add this line to debug the fetched chatrooms
         response.render('home', { title: 'Home', chatrooms });
     }).catch(err => {
         console.error(err);

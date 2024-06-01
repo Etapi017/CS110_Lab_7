@@ -18,7 +18,15 @@ mongoose.connect(mongoUri).then(() => {
 });
 
 // Set up Handlebars as the view engine
-app.engine('hbs', exphbs({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts/' }));
+app.engine('hbs', exphbs({
+    extname: 'hbs',
+    defaultLayout: 'layout',
+    layoutsDir: __dirname + '/views/layouts/',
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+    }
+}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
